@@ -1,10 +1,10 @@
 import MVPGenerationProgress from '@/components/MVPGenerationProgress';
 
-interface PageProps {
-  searchParams: Record<string, string | undefined>;
-}
-
-export default function Page({ searchParams }: PageProps) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { prompt?: string; userId?: string; projectName?: string; formData?: string };
+}) {
   const prompt = searchParams.prompt ?? '';
   const userId = searchParams.userId ?? '';
   const projectName = searchParams.projectName ?? '';
