@@ -54,17 +54,6 @@ A conversational assistant inside Agenta that:
 - Intelligent prompt chunking & real-time file streaming
 - Generates fully working MVPs with modular file structure
 
----
-
-## 🖼️ Screenshots
-
-| Landing Page Generator | MVP Progress View |
-|------------------------|-------------------|
-| ![](./Agenta%20-%20Aaditya%20Salgaonkar%20-%20Maximally%20Startup%20Makeathon/screencapture-localhost-3000-create-2025-07-06-14_33_38.png) | ![](./Agenta%20-%20Aaditya%20Salgaonkar%20-%20Maximally%20Startup%20Makeathon/screencapture-localhost-3000-generate-progress-2025-07-06-14_41_11.png) |
-
-| Dashboard View | Deployments |
-|----------------|-------------|
-| ![](./Agenta%20-%20Aaditya%20Salgaonkar%20-%20Maximally%20Startup%20Makeathon/screencapture-localhost-3000-dashboard-2025-07-06-16_50_03.png) | ![](./Agenta%20-%20Aaditya%20Salgaonkar%20-%20Maximally%20Startup%20Makeathon/screencapture-localhost-3000-deployments-2025-07-06-16_53_09.png) |
 
 ---
 
