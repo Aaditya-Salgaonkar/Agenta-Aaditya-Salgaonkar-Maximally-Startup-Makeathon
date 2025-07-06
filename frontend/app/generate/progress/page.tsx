@@ -1,17 +1,14 @@
-'use client'; // 👈 Only add this if you plan to use `useSearchParams` or EventSource here (but likely not needed here)
+import MVPGenerationProgress from '@/components/MVPGenerationProgress';
 
-import dynamic from 'next/dynamic';
+interface PageProps {
+  searchParams: Record<string, string | undefined>;
+}
 
-// Import client component only if MVPGenerationProgress uses hooks or SSE
-const MVPGenerationProgress = dynamic(() => import('@/components/MVPGenerationProgress'), {
-  ssr: false,
-});
-
-export default function Page({ searchParams }: any) {
-  const prompt = searchParams?.prompt ?? '';
-  const userId = searchParams?.userId ?? '';
-  const projectName = searchParams?.projectName ?? '';
-  const formData = searchParams?.formData ?? '';
+export default function Page({ searchParams }: PageProps) {
+  const prompt = searchParams.prompt ?? '';
+  const userId = searchParams.userId ?? '';
+  const projectName = searchParams.projectName ?? '';
+  const formData = searchParams.formData ?? '';
 
   return (
     <MVPGenerationProgress
