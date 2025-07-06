@@ -68,8 +68,10 @@ A conversational assistant inside Agenta that:
 | Hosting      | Vercel (frontend) + Render (backend) |
 
 ---
+
 **Vercel**: [Frontend](https://agenta-aaditya-salgaonkar-maximally.vercel.app/) <br>
 **Render**: [Backend](https://agenta-aaditya-salgaonkar-maximally.onrender.com/)  
+
 ---
 
 ## 📦 How to Run Locally
