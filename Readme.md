@@ -4,8 +4,6 @@
 **Hackathon Submission**: [Maximally Startup Makeathon 2025](https://maximally.in)  
 **Built by**: Aaditya Salgaonkar  
 **Duration**: 7 days | Solo Build  
-**Vercel*: [Frontend](https://agenta-aaditya-salgaonkar-maximally.vercel.app/)
-**Render**: [Backend](https://agenta-aaditya-salgaonkar-maximally.onrender.com/)  
 ---
 
 ## ❓ The Problem
@@ -69,6 +67,9 @@ A conversational assistant inside Agenta that:
 | Styling      | TailwindCSS 3 |
 | Hosting      | Vercel (frontend) + Render (backend) |
 
+---
+**Vercel**: [Frontend](https://agenta-aaditya-salgaonkar-maximally.vercel.app/) <br>
+**Render**: [Backend](https://agenta-aaditya-salgaonkar-maximally.onrender.com/)  
 ---
 
 ## 📦 How to Run Locally
