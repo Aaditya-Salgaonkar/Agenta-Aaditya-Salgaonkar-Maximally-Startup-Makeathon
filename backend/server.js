@@ -14,7 +14,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.get("/", (req, res) => {
-  res.send("Cogneeva backend is running.");
+  res.send("Agenta backend is running.");
 });
 const mvpRoutes = require("./routes/mvp");
 app.use("/api/mvp", mvpRoutes);
