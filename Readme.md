@@ -3,7 +3,7 @@
 
 **Hackathon Submission**: [Maximally Startup Makeathon 2025](https://maximally.in)  
 **Built by**: Aaditya Salgaonkar  
-**Duration**: 7 days | Solo Build  
+**Duration**: 5-6 days | Solo Build  
 ---
 
 ## ❓ The Problem
