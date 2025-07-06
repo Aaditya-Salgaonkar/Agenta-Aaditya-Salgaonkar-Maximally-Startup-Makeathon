@@ -41,7 +41,7 @@ localStorage.setItem("generationInProgress", "true");
     setSelectedFeatures(formData.features || []);
 
     const encodedForm = encodeURIComponent(JSON.stringify(formData));
-    const streamUrl = `http://localhost:5000/api/mvp/generate-stream?userId=${userId}&prompt=${prompt}&projectName=${projectName}&formData=${encodedForm}`;
+    const streamUrl = `https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/mvp/generate-stream?userId=${userId}&prompt=${prompt}&projectName=${projectName}&formData=${encodedForm}`;
 
     const evtSource = new EventSource(streamUrl);
 
@@ -50,7 +50,7 @@ localStorage.setItem("generationInProgress", "true");
 
       if (data.done) {
         setComplete(true);
-        setDownloadUrl(`http://localhost:5000/api/mvp/download/${projectName}`);
+        setDownloadUrl(`https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/mvp/download/${projectName}`);
         evtSource.close();
 
         setTimeout(() => router.push("/manage-mvps"), 3000);
