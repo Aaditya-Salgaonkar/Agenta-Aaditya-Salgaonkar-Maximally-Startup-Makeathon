@@ -3,12 +3,12 @@ import MVPGenerationProgress from '@/components/MVPGenerationProgress';
 export default function Page({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | undefined };
+  searchParams: { prompt?: string; userId?: string; projectName?: string; formData?: string };
 }) {
-  const prompt = searchParams?.prompt || '';
-  const userId = searchParams?.userId || '';
-  const projectName = searchParams?.projectName || '';
-  const formData = searchParams?.formData || '';
+  const prompt = searchParams.prompt ?? '';
+  const userId = searchParams.userId ?? '';
+  const projectName = searchParams.projectName ?? '';
+  const formData = searchParams.formData ?? '';
 
   return (
     <MVPGenerationProgress
