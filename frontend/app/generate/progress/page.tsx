@@ -1,24 +1,15 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
 import MVPGenerationProgress from "@/components/MVPGenerationProgress";
 
-export default function MVPStreamPage() {
-  const search = useSearchParams();
-
-  const userId = search.get("userId");
-  const prompt = search.get("prompt");
-  const projectName = search.get("projectName");
-  const formData = search.get("formData");
-
-  if (!userId || !prompt || !projectName || !formData) {
-    return <div className="text-white p-10">Missing parameters</div>;
-  }
+export default function Page({ searchParams }: { searchParams: Record<string, string> }) {
+  const prompt = searchParams.prompt;
+  const userId = searchParams.userId;
+  const projectName = searchParams.projectName;
+  const formData = searchParams.formData;
 
   return (
     <MVPGenerationProgress
-      userId={userId}
       prompt={prompt}
+      userId={userId}
       projectName={projectName}
       formData={formData}
     />
