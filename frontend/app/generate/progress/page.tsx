@@ -1,21 +1,10 @@
-import MVPGenerationProgress from '@/components/MVPGenerationProgress';
+import dynamic from 'next/dynamic';
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { prompt?: string; userId?: string; projectName?: string; formData?: string };
-}) {
-  const prompt = searchParams.prompt ?? '';
-  const userId = searchParams.userId ?? '';
-  const projectName = searchParams.projectName ?? '';
-  const formData = searchParams.formData ?? '';
+const MVPGenerationProgressClient = dynamic(
+  () => import('@/components/MVPGenerationProgressClient'),
+  { ssr: false } // Because it uses EventSource or hooks
+);
 
-  return (
-    <MVPGenerationProgress
-      prompt={prompt}
-      userId={userId}
-      projectName={projectName}
-      formData={formData}
-    />
-  );
+export default function Page() {
+  return <MVPGenerationProgressClient />;
 }
