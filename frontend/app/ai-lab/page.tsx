@@ -1,159 +1,233 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Switch } from "@headlessui/react";
+import { useState } from 'react';
+import { Switch } from '@headlessui/react';
+import { toast } from 'react-hot-toast';
+import Loading from '@/components/Loading';
+import confetti from 'canvas-confetti';
+const MODELS = [
+  'gpt-4o',
+  'gpt-4-turbo',
+  'claude-3-opus',
+  'mistral-8x7b',
+  'gemini-1.5-pro',
+];
+
+const QUALITIES = [
+  'Basic',
+  'Professional',
+  'Enterprise',
+  'Industry‑grade',
+];
+
+interface AiConfig {
+  model: string;
+  quality: string;
+  temperature: number;
+  maxTokens: number;
+  strictFormat: boolean;
+  includeAuth: boolean;
+  engineInstructions: string;
+}
 
 export default function AILabPage() {
-  const [temperature, setTemperature] = useState(0.4);
-  const [maxTokens, setMaxTokens] = useState(3000);
-  const [strictFormat, setStrictFormat] = useState(true);
-  const [includeAuth, setIncludeAuth] = useState(true);
-  const [engineInstructions, setEngineInstructions] = useState("");
+  const [config, setConfig] = useState<AiConfig>({
+    model: MODELS[0],
+    quality: QUALITIES[2],
+    temperature: 0.4,
+    maxTokens: 3000,
+    strictFormat: true,
+    includeAuth: true,
+    engineInstructions: '',
+  });
 
-  const models = [
-    "gpt-4o",
-    "gpt-4-turbo",
-    "claude-3-opus",
-    "mistral-8x7b",
-    "gemini-1.5-pro",
-  ];
-  const [selectedModel, setSelectedModel] = useState(models[0]);
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const codeQuality = ["Basic", "Professional", "Enterprise", "Industry-grade"];
-  const [selectedQuality, setSelectedQuality] = useState(codeQuality[2]);
+
+const handleSave = async () => {
+  setSaving(true);
+  setLoading(true);
+
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+
+  toast.success("AI configuration saved successfully ✅");
+
+  confetti({
+    particleCount: 120,
+    spread: 70,
+    origin: { y: 0.6 },
+  });
+
+  setConfig({
+    model: MODELS[0],
+    quality: QUALITIES[2],
+    temperature: 0.4,
+    maxTokens: 3000,
+    strictFormat: true,
+    includeAuth: true,
+    engineInstructions: "",
+  });
+
+  setSaving(false);
+  setLoading(false);
+};
+
+  if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#F8FAFC] to-[#E2E8F0] p-10">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-5xl py-3 mb-5 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA]">
-          Code Finetuning Studio (Coming Soon...)
-        </h1>
-        {/* Standalone controls */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Model */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="font-semibold mb-3 text-indigo-700">AI Model</h3>
+    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white px-6 py-10">
+      <div className="max-w-5xl mx-auto space-y-10">
+        <header className="">
+          <h1 className="text-5xl font-extrabold pb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2]">
+            AI Finetuning Studio
+          </h1>
+          <p className="mt-2 text-gray-400">
+            Configure how your AI engine builds SaaS MVPs
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <Card title="AI Model">
             <select
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500"
+              value={config.model}
+              onChange={(e) =>
+                setConfig({ ...config, model: e.target.value })
+              }
+              className="w-full p-3 rounded-xl bg-black/60 border border-white/20 text-white"
             >
-              {models.map((model) => (
-                <option key={model} value={model}>
-                  {model}
+              {MODELS.map((m) => (
+                <option key={m} value={m}>
+                  {m}
                 </option>
               ))}
             </select>
-          </div>
+          </Card>
 
-          {/* Code Quality */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="font-semibold mb-3 text-indigo-700">Code Quality</h3>
+          <Card title="Code Quality">
             <select
-              value={selectedQuality}
-              onChange={(e) => setSelectedQuality(e.target.value)}
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500"
+              value={config.quality}
+              onChange={(e) =>
+                setConfig({ ...config, quality: e.target.value })
+              }
+              className="w-full p-3 rounded-xl bg-black/60 border border-white/20 text-white"
             >
-              {codeQuality.map((q) => (
+              {QUALITIES.map((q) => (
                 <option key={q} value={q}>
                   {q}
                 </option>
               ))}
             </select>
-          </div>
+          </Card>
 
-          {/* Creativity */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="font-semibold mb-3 text-indigo-700">
-              Creativity (Temperature)
-            </h3>
+          <Card title="Creativity (Temperature)">
             <input
               type="range"
               min={0}
               max={1}
-              step={0.05}
-              value={temperature}
-              onChange={(e) => setTemperature(parseFloat(e.target.value))}
+              step={0.01}
+              value={config.temperature}
+              onChange={(e) =>
+                setConfig({ ...config, temperature: parseFloat(e.target.value) })
+              }
               className="w-full"
             />
-            <div className="mt-2 text-center font-semibold">
-              {temperature.toFixed(2)}
-            </div>
+            <p className="mt-1 text-sm text-cyan-300">
+              {config.temperature.toFixed(2)}
+            </p>
+          </Card>
+              <div className="md:col-span-3">
+            <Card title="Advanced Engine Instructions">
+              <textarea
+                rows={4}
+                value={config.engineInstructions}
+                onChange={(e) =>
+                  setConfig({ ...config, engineInstructions: e.target.value })
+                }
+                className="w-full p-4 rounded-xl bg-black/60 border border-white/20 text-white h-[10vh]"
+                placeholder="e.g. Prefer functional components, avoid inline CSS..."
+              />
+            </Card>
           </div>
-
-          {/* Max Tokens */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="font-semibold mb-3 text-indigo-700">Max Tokens</h3>
+          <Card title="Max Tokens">
             <input
               type="number"
-              value={maxTokens}
-              onChange={(e) => setMaxTokens(Number(e.target.value))}
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500"
+              value={config.maxTokens}
+              onChange={(e) =>
+                setConfig({ ...config, maxTokens: Number(e.target.value) })
+              }
+              className="w-full p-3 rounded-xl bg-black/60 border border-white/20 text-white"
             />
-          </div>
+          </Card>
 
-          {/* Strict Format */}
-          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between">
-            <span className="font-semibold text-indigo-700">
-              Strict Parsing Format
-            </span>
-            <Switch
-              checked={strictFormat}
-              onChange={setStrictFormat}
-              className={`${
-                strictFormat ? "bg-indigo-600" : "bg-gray-300"
-              } relative inline-flex h-6 w-11 items-center rounded-full`}
-            >
-              <span
-                className={`${
-                  strictFormat ? "translate-x-6" : "translate-x-1"
-                } inline-block h-4 w-4 transform bg-white rounded-full transition`}
-              />
-            </Switch>
-          </div>
+          <ToggleCard
+            label="Strict Output Format"
+            enabled={config.strictFormat}
+            onToggle={(v) => setConfig({ ...config, strictFormat: v })}
+          />
 
-          {/* Include Auth */}
-          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between">
-            <span className="font-semibold text-indigo-700">
-              Include Authentication
-            </span>
-            <Switch
-              checked={includeAuth}
-              onChange={setIncludeAuth}
-              className={`${
-                includeAuth ? "bg-indigo-600" : "bg-gray-300"
-              } relative inline-flex h-6 w-11 items-center rounded-full`}
-            >
-              <span
-                className={`${
-                  includeAuth ? "translate-x-6" : "translate-x-1"
-                } inline-block h-4 w-4 transform bg-white rounded-full transition`}
-              />
-            </Switch>
-          </div>
+         
+               <button
+  onClick={handleSave}
+  disabled={saving}
+  className="w-full py-4 text-2xl text-center justify-center rounded-xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-110 disabled:opacity-50"
+>
+  {saving ? 'Saving...' : 'Save Configuration'}
+</button>
 
-          {/* Engine Instructions */}
-          <div className="bg-white rounded-xl shadow-lg p-6 col-span-full">
-            <h3 className="font-semibold mb-3 text-indigo-700">
-              Advanced Engine Instructions
-            </h3>
-            <textarea
-              rows={5}
-              value={engineInstructions}
-              onChange={(e) => setEngineInstructions(e.target.value)}
-              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500"
-              placeholder="Optional: Give your own instructions to fine-tune AI behavior"
-            />
-          </div>
+          
         </div>
 
-        {/* Generate Button */}
-        <div className="mt-10">
-          <button className="w-full py-4 rounded-2xl font-bold text-xl text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg hover:scale-105 transition-all">
-            Fine Tune AI Model
-          </button>
-        </div>
+       
       </div>
+    </div>
+  );
+}
+
+// 🔹 Card Component
+function Card({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl rounded-2xl p-6">
+      <h3 className="text-indigo-300 font-semibold text-sm uppercase mb-3">
+        {title}
+      </h3>
+      {children}
+    </div>
+  );
+}
+
+// 🔹 Toggle Component
+function ToggleCard({
+  label,
+  enabled,
+  onToggle,
+}: {
+  label: string;
+  enabled: boolean;
+  onToggle: (v: boolean) => void;
+}) {
+  return (
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl rounded-2xl p-6 flex items-center justify-between">
+      <span className="text-indigo-200 font-medium">{label}</span>
+      <Switch
+        checked={enabled}
+        onChange={onToggle}
+        className={`${
+          enabled ? 'bg-indigo-600' : 'bg-gray-500/50'
+        } relative inline-flex h-6 w-11 items-center rounded-full`}
+      >
+        <span
+          className={`${
+            enabled ? 'translate-x-6' : 'translate-x-1'
+          } inline-block h-5 w-5 bg-white rounded-full transition`}
+        />
+      </Switch>
     </div>
   );
 }

@@ -12,26 +12,26 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push("/login");  // Redirect to login after sign out
+    router.push("/login");
   };
 
   return (
-    <div className="mx-5 my-4 flex flex-row justify-between items-center">
+    <div className="flex flex-row justify-between items-center bg-[#0B0F19]  p-4  shadow-lg">
       <div>
-        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] py-2">
-          Cogneeva
+        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text pb-5 bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2]">
+          Agenta
         </h1>
       </div>
 
-      <div className="flex flex-row gap-5 py-2 items-center">
+      <div className="flex flex-row gap-4 items-center">
         {session ? (
           <>
-            <div className="text-lg font-semibold">
+            <div className="text-md font-medium text-[#A0AEC0]">
               {session.user.email}
             </div>
             <Button
               onClick={handleSignOut}
-              className="bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] text-white hover:scale-105 transition-all shadow-lg font-semibold px-6 py-3 rounded-xl"
+              className="bg-gradient-to-r from-[#7B61FF] to-[#4DC3FF] text-white hover:brightness-125 transition-all shadow-lg font-semibold px-5 py-2 rounded-2xl"
             >
               Sign Out
             </Button>
@@ -40,14 +40,14 @@ export default function Navbar() {
           <>
             <Button
               onClick={() => router.push("/login")}
-              className="bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] text-white hover:scale-105 transition-all shadow-lg font-semibold px-6 py-3 rounded-xl"
+              className="bg-gradient-to-r from-[#7B61FF] to-[#4DC3FF] text-white hover:brightness-125 transition-all shadow-lg font-semibold px-5 py-2 rounded-2xl"
             >
               Log In
             </Button>
             <Button
               onClick={() => router.push("/signup")}
               variant={"outline"}
-              className="border-2 border-[#2563EB] text-[#2563EB] hover:scale-105 hover:text-[#2563EB] transition-all shadow-lg font-semibold px-6 py-3 rounded-xl"
+              className="border border-[#4DC3FF] text-[#4DC3FF] hover:border-[#00FFB2] hover:text-[#00FFB2] transition-all shadow-lg font-semibold px-5 py-2 rounded-2xl"
             >
               Sign Up
             </Button>

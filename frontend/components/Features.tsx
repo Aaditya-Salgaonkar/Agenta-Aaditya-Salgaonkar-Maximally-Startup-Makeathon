@@ -3,72 +3,72 @@ import React from "react";
 export default function Features() {
   const features = [
     {
-      title: "Zero-Code AI MVP Generator",
-      desc: "Instantly transform your startup idea into a production-ready, fully-coded SaaS platform without writing a single line of code.",
+      title: "Zero-Code SaaS Launchpad",
+      desc: "Describe your vision, and Agenta generates a production-ready, full-stack web app — no coding or config required.",
       icon: "🚀",
     },
     {
-      title: "Dynamic AI-Driven Prompt Engine",
-      desc: "Our Galuxium core deeply interacts with users to auto-architect databases, landing pages, authentication, and backend flows.",
+      title: "Adaptive Prompt Intelligence",
+      desc: "Smart parsing of your input to build tailored architectures — including UI, backend logic, and data models.",
       icon: "🧠",
     },
     {
-      title: "Customizable Multi-Step Wizard",
-      desc: "Highly detailed step-by-step blueprint builder with real-time validations, tech-stack selection, UI styling, and scalability configurations.",
+      title: "Visual Stack Composer",
+      desc: "Customize everything: frameworks, components, auth flows, and database setup through a guided visual builder.",
       icon: "📝",
     },
     {
-      title: "Real-Time GitHub Code Deployment",
-      desc: "Instantly generate, commit, and deploy your full codebase to GitHub and Vercel using powerful CI/CD pipelines.",
+      title: "Instant Code & CI/CD Push",
+      desc: "Autogenerates and deploys a clean codebase directly to your GitHub repo with ready-to-run CI/CD workflows.",
       icon: "💻",
     },
     {
-      title: "Modular & Scalable Architecture",
-      desc: "All MVPs follow microservices best practices, modular clean code, and scalable deployment pipelines powered by industry standards.",
+      title: "Modular by Design",
+      desc: "Each project follows scalable patterns — clean code, reusable components, and future-proof architecture.",
       icon: "🏗️",
     },
     {
-      title: "Fully Managed AI Orchestration",
-      desc: "Runs entirely on open-source models like LLaMA 2, Code LLaMA & Gemini 1.5 Pro — ensuring high performance at zero cost.",
+      title: "Open-Model AI Engine",
+      desc: "Built on open-source LLMs like LLaMA 2 and Code LLaMA to give you speed, control, and cost-free execution.",
       icon: "⚙️",
     },
     {
-      title: "Ultra-Secure Cloud Integration",
-      desc: "Backed by Supabase and Oracle’s free-tier cloud infra, all deployments feature encrypted databases, secured endpoints, and isolated user spaces.",
+      title: "Secure by Default",
+      desc: "Every deployment is isolated, encrypted, and powered by Supabase with cloud-native security baked in.",
       icon: "🔒",
     },
     {
-      title: "Extensible Plugin Marketplace",
-      desc: "Pluggable add-on ecosystem for UI templates, payment integrations, SaaS extensions and custom AI fine-tuning modules.",
+      title: "Plugin-Friendly Ecosystem",
+      desc: "Choose from growing extensions: templates, payment providers, GPT agents, and custom feature packs.",
       icon: "🧩",
     },
     {
-      title: "Self-Learning Continuous Improvement",
-      desc: "Our Galuxium core adapts based on user feedback, usage patterns, and code analysis to improve its future code generation quality.",
+      title: "Smarter with Every Build",
+      desc: "Agenta evolves through real-world usage — learning from your patterns to improve every future output.",
       icon: "📈",
     },
   ];
 
   return (
-    <section className="w-full bg-white text-[#1A1A1A] py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-full bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] opacity-10 blur-3xl pointer-events-none" />
+    <section className="w-full bg-[#0B0F19] text-white py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2] opacity-10 blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 text-center">
-        <h2 className="text-5xl font-extrabold leading-tight mb-16 bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] pb-5">
-          Experience The Power{" "}
+      <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
+        <h2 className="text-5xl font-extrabold leading-tight mb-16 bg-clip-text text-transparent bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2] pb-5">
+          What Makes Agenta Unstoppable
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="p-8 bg-white rounded-3xl shadow-xl border border-[#E0F2FE] hover:scale-105 transition-all duration-300"
+              className="p-8 bg-[#111827] rounded-3xl shadow-xl border border-[#1F2937] hover:scale-[1.03] transition-all duration-300"
             >
-              <div className="flex justify-center items-center mb-6 w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] text-white text-4xl shadow-lg">
+              <div className="flex justify-center items-center mb-6 w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2] text-white text-4xl shadow-lg">
                 {feature.icon}
               </div>
-              <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <h3 className="text-2xl font-bold mb-4 text-white">{feature.title}</h3>
+              <p className="text-[#A0AEC0] text-lg leading-relaxed">
                 {feature.desc}
               </p>
             </div>

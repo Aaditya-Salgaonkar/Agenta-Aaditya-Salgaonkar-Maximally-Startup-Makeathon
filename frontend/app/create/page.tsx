@@ -1,369 +1,142 @@
 "use client";
 
-import Loading from "@/components/Loading";
-import { supabase } from "@/lib/supabase";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { FaRocket } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { supabase } from "@/lib/supabase";
 
-interface FormData {
-  idea: string;
-  industry: string;
-  audience: string;
-  features: string[];
-  auth: string;
-  database: string;
-  design: string;
-  deployment: string;
-  aiModel: string;
-}
-
-interface UserData {
-  id: string;
-  name: string;
-  email: string;
-}
+const featureOptions = [
+  "Landing Page", "Authentication", "Database CRUD",
+  "Payment Integration", "Admin Panel", "File Upload",
+  "Email Notifications", "Analytics Dashboard"
+];
 
 export default function CreateMVPPage() {
-  const initialState: FormData = {
+  const [form, setForm] = useState({
     idea: "",
     industry: "",
     audience: "",
-    features: [],
-    auth: "",
-    database: "",
-    design: "",
-    deployment: "",
-    aiModel: "",
-  };
-
-  const [formData, setFormData] = useState<FormData>(initialState);
-  const [user, setUser] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+    projectName: "",
+    features: [] as string[],
+  });
+  const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter();
 
-  const featuresOptions: string[] = [
-    "Landing Page",
-    "Authentication",
-    "Database CRUD",
-    "Payment Integration",
-    "Admin Panel",
-    "File Upload",
-    "Email Notifications",
-    "Analytics Dashboard",
-  ];
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleToggleFeature = (feature: string) => {
+    setForm(prev => ({
+      ...prev,
+      features: prev.features.includes(feature)
+        ? prev.features.filter(f => f !== feature)
+        : [...prev.features, feature],
+    }));
   };
 
-  const handleFeatureChange = (feature: string) => {
-    const updatedFeatures = formData.features.includes(feature)
-      ? formData.features.filter((f) => f !== feature)
-      : [...formData.features, feature];
-    setFormData({ ...formData, features: updatedFeatures });
-  };
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-
-      if (sessionError || !session) {
-        router.push("/");
-        return;
-      }
-
-      const userId = session.user.id;
-
-      const { data, error } = await supabase
-        .from("users")
-        .select("name, email")
-        .eq("id", userId)
-        .single();
-
-      if (error) {
-        console.error("Error fetching user:", error);
-        router.push("/");
-        return;
-      }
-
-      setUser({
-        id: userId,
-        name: data.name,
-        email: data.email,
-      });
-
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, [router]);
-
-  if (loading || submitting) return <Loading />;
-  if (!user) return null;
-
-  const generatePrompt = (data: FormData): string => {
-    return `
-    Generate full-stack SaaS MVP code using latest Javascript tech stack.
-
-    - Idea: ${data.idea}
-    - Industry: ${data.industry}
-    - Audience: ${data.audience}
-    - Features: ${data.features.join(", ")}
-    - Auth: ${data.auth}
-    - Database: ${data.database}
-    - Design: ${data.design}
-    - Deployment: ${data.deployment}
-    - AI Model: ${data.aiModel}
-
-    Generate complete code with backend, frontend, database, and deployment files.
-    `;
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!user) {
-      alert("User not found.");
+  const handleSubmit = async () => {
+    if (!form.idea || !form.industry || !form.audience) {
+      toast.error("Please fill out all fields.");
       return;
     }
 
-    setSubmitting(true); // Start global loading
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) return toast.error("Not authenticated.");
 
-    try {
-      const response = await fetch("http://localhost:5000/api/mvp/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          prompt: generatePrompt(formData),
-          projectName: formData.idea
-        })
-      });
+    const projectName = form.projectName?.trim() || `mvp-${Date.now()}`;
+    const formDataString = encodeURIComponent(JSON.stringify(form));
+    const prompt = encodeURIComponent(form.idea);
 
-      const result = await response.json();
+    setIsGenerating(true);
 
-      if (result.success) {
-        console.log("MVP generated successfully!");
-        // Small delay for premium smoothness
-        setTimeout(() => {
-          router.push("/manage-mvps");
-        }, 800);
-      } else {
-        alert("Failed to generate MVP.");
-        setSubmitting(false);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error occurred while generating MVP.");
-      setSubmitting(false);
-    }
+    router.push(
+      `/generate/progress?userId=${userId}&prompt=${prompt}&projectName=${encodeURIComponent(projectName)}&formData=${formDataString}`
+    );
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-[#1A1A1A] p-10">
-      <div className="mb-10">
-        <h1 className="text-5xl py-3 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA]">
-          Create New MVP
+    <div className="min-h-screen bg-[#0F172A] text-white px-6 py-10">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00FFB2] text-transparent bg-clip-text mb-10">
+          Create Your SaaS MVP
         </h1>
-        <p className="text-lg text-[#6B7280] mt-4">
-          Let AI auto-generate your SaaS startup code.
-        </p>
+
+        <div className="bg-white/5 backdrop-blur-lg p-6 rounded-2xl border border-white/10 shadow-xl space-y-6">
+          <div>
+            <label className="text-sm text-gray-300">Startup Idea</label>
+            <textarea
+              className="w-full h-[12vh] mt-1 p-3 rounded-lg bg-[#1E293B] text-white border border-white/10"
+              rows={4}
+              value={form.idea}
+              onChange={e => setForm({ ...form, idea: e.target.value })}
+              placeholder="Describe your startup idea..."
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm text-gray-300">Industry</label>
+              <input
+                type="text"
+                className="w-full mt-1 p-3 rounded-lg bg-[#1E293B] text-white border border-white/10"
+                value={form.industry}
+                onChange={e => setForm({ ...form, industry: e.target.value })}
+                placeholder="e.g. FinTech, EdTech"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-300">Audience</label>
+              <input
+                type="text"
+                className="w-full mt-1 p-3 rounded-lg bg-[#1E293B] text-white border border-white/10"
+                value={form.audience}
+                onChange={e => setForm({ ...form, audience: e.target.value })}
+                placeholder="e.g. Startups, Freelancers"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-300">Project Name</label>
+            <input
+              type="text"
+              className="w-full mt-1 p-3 rounded-lg bg-[#1E293B] text-white border border-white/10"
+              value={form.projectName}
+              onChange={e => setForm({ ...form, projectName: e.target.value })}
+              placeholder="e.g. agentbot-ai"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-300">Select Features</label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+              {featureOptions.map(feature => (
+                <button
+                  key={feature}
+                  type="button"
+                  onClick={() => handleToggleFeature(feature)}
+                  className={`text-sm px-3 py-2 rounded-lg border transition ${
+                    form.features.includes(feature)
+                      ? "bg-gradient-to-r from-[#00FFB2] to-[#4DC3FF] text-black font-semibold"
+                      : "bg-[#1E293B] border-white/10 text-white"
+                  }`}
+                >
+                  {feature}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center mt-6">
+            <button
+              onClick={handleSubmit}
+              disabled={isGenerating}
+              className="px-6 py-3 rounded-xl text-black font-semibold bg-gradient-to-r from-[#00FFB2] to-[#4DC3FF] hover:scale-105 transition"
+            >
+              {isGenerating ? "Redirecting..." : "Generate MVP"}
+            </button>
+          </div>
+        </div>
       </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-5xl mx-auto bg-white p-10 rounded-3xl shadow-xl border border-[#E5E7EB] space-y-8"
-      >
-        {/* IDEA */}
-        <div>
-          <label className="block font-bold mb-2 text-xl">
-            Describe Your Startup Idea
-          </label>
-          <textarea
-            name="idea"
-            value={formData.idea}
-            onChange={handleChange}
-            className="w-full p-4 border rounded-xl text-lg"
-            rows={4}
-            placeholder="Explain your startup idea..."
-            required
-          />
-        </div>
-
-        {/* INDUSTRY & AUDIENCE */}
-        <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              Industry / Niche
-            </label>
-            <input
-              type="text"
-              name="industry"
-              value={formData.industry}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              placeholder="Health, EdTech, FinTech etc."
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              Target Audience
-            </label>
-            <input
-              type="text"
-              name="audience"
-              value={formData.audience}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              placeholder="Who will use your app?"
-              required
-            />
-          </div>
-        </div>
-
-        {/* FEATURES */}
-        <div>
-          <label className="block font-bold mb-4 text-xl">
-            Select Required Features
-          </label>
-          <div className="grid md:grid-cols-2 gap-4">
-            {featuresOptions.map((feature) => (
-              <label
-                key={feature}
-                className="flex items-center gap-3 bg-[#F9FAFB] border border-[#E5E7EB] p-4 rounded-xl shadow-sm"
-              >
-                <input
-                  type="checkbox"
-                  checked={formData.features.includes(feature)}
-                  onChange={() => handleFeatureChange(feature)}
-                  className="w-5 h-5"
-                />
-                <span className="text-lg">{feature}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* OTHER SELECT OPTIONS */}
-        <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              Authentication Required?
-            </label>
-            <select
-              name="auth"
-              value={formData.auth}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Yes">Yes - User Login</option>
-              <option value="No">No - Public Access</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              Database Preference
-            </label>
-            <select
-              name="database"
-              value={formData.database}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Supabase (PostgreSQL)">Supabase (PostgreSQL)</option>
-              <option value="MongoDB Atlas">MongoDB Atlas</option>
-              <option value="AI-generated Schema">AI-generated Schema</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              Design Style
-            </label>
-            <select
-              name="design"
-              value={formData.design}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Minimalist">Minimalist</option>
-              <option value="Modern SaaS">Modern SaaS</option>
-              <option value="Dark Mode">Dark Mode</option>
-              <option value="Custom Branding">Custom Branding</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              Deployment Preference
-            </label>
-            <select
-              name="deployment"
-              value={formData.deployment}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Vercel">Vercel</option>
-              <option value="Render">Render</option>
-              <option value="Supabase Hosting">Supabase Hosting</option>
-              <option value="Manual">Manual</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block font-bold mb-2 text-xl">
-              AI Model Preference
-            </label>
-            <select
-              name="aiModel"
-              value={formData.aiModel}
-              onChange={handleChange}
-              className="w-full p-4 border rounded-xl text-lg"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Mistral 7B">Mistral 7B</option>
-              <option value="LLaMA 3 8B">LLaMA 3 8B</option>
-              <option value="Phi-3">Phi-3</option>
-              <option value="Use Recommended">Use Recommended Model</option>
-              
-            </select>
-            
-          </div>
-          <div className="pt-2">
-          <button
-            type="submit"
-            className="flex gap-3 items-center justify-center w-full py-7 text-2xl font-bold bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] text-white rounded-xl hover:scale-105 transition transform"
-          >
-            <FaRocket className="text-3xl" />
-            Generate MVP
-          </button>
-        </div>
-        </div>
-
-        
-      </form>
     </div>
   );
 }

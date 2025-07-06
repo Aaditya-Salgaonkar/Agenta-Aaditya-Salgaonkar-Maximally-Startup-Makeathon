@@ -28,7 +28,11 @@ export default function CustomizeMVP() {
 
   useEffect(() => {
     const fetchMVP = async () => {
-      const { data, error } = await supabase.from("mvps").select("*").eq("id", id).single();
+      const { data, error } = await supabase
+        .from("mvps")
+        .select("*")
+        .eq("id", id)
+        .single();
 
       if (error) {
         toast.error("Failed to fetch MVP");
@@ -80,20 +84,21 @@ export default function CustomizeMVP() {
   if (loading) return <Loading />;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gradient-to-br bg-[#111827] text-white p-5 ">
       {/* Left: File Tree */}
-      <div className="w-1/4 bg-gray-100 border-r p-5 overflow-y-auto">
-        <h2 className="text-lg font-semibold mb-4">Files</h2>
+      <div className="w-1/4 bg-[#111827] border-r border-white/10 p-10 overflow-y-auto">
+        <h2 className="text-lg font-bold text-white mb-4">📁 Files</h2>
         <ul className="space-y-2">
           {mvp?.files.map((file, index) => (
             <li key={index}>
               <button
                 onClick={() => setSelectedFile(file)}
-                className={`w-full text-left px-3 py-2 rounded-lg ${
-                  selectedFile?.path === file.path
-                    ? "bg-indigo-200 text-indigo-700"
-                    : "hover:bg-gray-200"
-                }`}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition 
+                  ${
+                    selectedFile?.path === file.path
+                      ? "bg-gradient-to-r from-[#7B61FF] to-[#4DC3FF] text-black shadow-lg"
+                      : "text-gray-300 hover:bg-white/5 hover:text-white"
+                  }`}
               >
                 {file.path}
               </button>
@@ -103,18 +108,19 @@ export default function CustomizeMVP() {
       </div>
 
       {/* Right: Code Viewer */}
-      <div className="w-3/4 p-5 overflow-y-auto">
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-bold">{selectedFile?.path}</h2>
+      <div className="w-3/4 p-6 overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-white">{selectedFile?.path}</h2>
           <button
             onClick={handleDownload}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+            className="px-5 py-3 text-sm font-semibold bg-gradient-to-r from-[#00FFB2] to-[#4DC3FF] text-black rounded-xl hover:scale-105 transition transform shadow-lg"
             disabled={downloading}
           >
             {downloading ? "Preparing ZIP..." : "Download ZIP"}
           </button>
         </div>
-        <pre className="bg-gray-900 text-green-300 p-5 rounded-lg overflow-x-auto whitespace-pre-wrap">
+
+        <pre className="bg-[#0f172a] text-[#a6ffcb] p-6 rounded-xl shadow-inner overflow-x-auto whitespace-pre-wrap font-mono text-sm leading-relaxed">
           {selectedFile?.content}
         </pre>
       </div>

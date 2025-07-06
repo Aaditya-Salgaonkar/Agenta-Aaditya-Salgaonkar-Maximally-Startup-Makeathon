@@ -1,17 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  FaTachometerAlt,
-  FaCogs,
-  FaRocket,
-  FaFlask,
-  FaUser,
-  FaSignOutAlt,
-  FaBolt
+  FaTachometerAlt, FaCogs, FaRocket, FaFlask,
+  FaUser, FaSignOutAlt, FaBolt
 } from "react-icons/fa";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -19,20 +17,29 @@ export default function Sidebar() {
   const session = useSession();
   const supabase = useSupabaseClient();
 
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  // Check localStorage on load
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const active = localStorage.getItem("generationInProgress") === "true";
+      setIsGenerating(active);
+    }, 1000); // Check every second (optional: reduce to 3s)
+
+    return () => clearInterval(interval);
+  }, []);
+
   const menuItems = [
     { label: "Dashboard", icon: <FaTachometerAlt />, path: "/dashboard" },
-    { label: "Manage MVPs", icon: <FaCogs />, path: "/manage-mvps" },
-    { label: "Galuxium AI", icon: <FaBolt />, path: "/ai" },
-    { label: "Deployments", icon: <FaRocket />, path: "/deployments" },
-    { label: "AI Lab", icon: <FaFlask />, path: "/ai-lab" },
+    { label: "Warehouse", icon: <FaCogs />, path: "/manage-mvps" },
+    { label: "Copilot", icon: <FaBolt />, path: "/ai" },
+    { label: "Production", icon: <FaRocket />, path: "/deployments" },
+    { label: "Studio", icon: <FaFlask />, path: "/ai-lab" },
     { label: "Account", icon: <FaUser />, path: "/account" },
   ];
 
-  
   const handleSelect = (path: string) => {
-    if (pathname !== path) {
-      router.push(path);
-    }
+    if (pathname !== path) router.push(path);
   };
 
   const handleSignOut = async () => {
@@ -41,15 +48,13 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-60 h-screen bg-white border-r border-[#E0F2FE] shadow-lg flex flex-col justify-between fixed z-50">
+    <aside className="w-64 h-screen pt-5 bg-black backdrop-blur-md text-white shadow-xl flex flex-col justify-between fixed z-50 border-r border-white/10">
       <div className="p-6">
-        <div>
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] py-2">
-            Cogneeva
-          </h1>
-        </div>
+        <h1 className="text-4xl pb-5 font-extrabold text-center tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-violet-500 to-indigo-400">
+          Agenta
+        </h1>
 
-        <nav className="flex flex-col gap-5 mt-10">
+        <nav className="flex flex-col gap-3 mt-10">
           {menuItems.map(({ label, icon, path }) => (
             <MenuItem
               key={label}
@@ -61,34 +66,45 @@ export default function Sidebar() {
             />
           ))}
         </nav>
-
       </div>
 
-      <div className="flex flex-col items-center gap-3 p-4 border-t border-[#E0F2FE]">
+      {/* Only show if generating */}
+      {isGenerating && (
+        <Link href="/generate/progress">
+          <div className="z-50 flex flex-col items-center justify-center bg-transparent absolute bottom-28 left-24 animate-pulse cursor-pointer">
+            <Image
+              src="/loader.gif"
+              alt="Generating MVP..."
+              width={50}
+              height={50}
+              className="w-20 h-20 object-contain"
+            />
+            <p className="text-xs text-indigo-300 -mt-2 pb-1 text-center">
+              Generating...
+            </p>
+          </div>
+        </Link>
+      )}
+
+      <div className="flex flex-col items-center gap-3 p-4 border-t border-white/10 text-sm">
         {session ? (
-          <>
-          {console.log(session)}
-            
-            <div
-              onClick={handleSignOut}
-              className="flex items-center gap-2 cursor-pointer text-[#2563EB] font-semibold text-sm hover:underline transition"
-            >
-              <FaSignOutAlt />
-              Sign Out
-            </div>
-          </>
+          <div
+            onClick={handleSignOut}
+            className="flex items-center gap-2 cursor-pointer text-cyan-300 hover:text-white hover:underline transition"
+          >
+            <FaSignOutAlt />
+            Sign Out
+          </div>
         ) : (
-          <div className="text-sm text-gray-500">Not signed in</div>
+          <div className="text-gray-400">Not signed in</div>
         )}
-        <div className="text-sm text-gray-500 mt-3">
-          Powered by <span className="font-bold">Galuxium</span>
+        <div className="text-gray-500 mt-2">
+          Powered by <span className="font-semibold text-indigo-300">Galuxium</span>
         </div>
       </div>
     </aside>
   );
 }
-
-
 
 type MenuItemProps = {
   icon: React.ReactNode;
@@ -102,23 +118,13 @@ function MenuItem({ icon, label, path, isActive, onSelect }: MenuItemProps) {
   return (
     <div
       onClick={() => onSelect(path)}
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all relative group
-        ${isActive ? "text-[#2563EB] font-semibold" : "hover:bg-[#F5F5F5]"}`}
+      className={`flex items-center gap-4 px-5 py-3 rounded-xl cursor-pointer transition-all duration-200
+        ${isActive
+          ? "bg-gradient-to-r from-cyan-500 via-purple-500 to-indigo-500 text-white shadow-md"
+          : "hover:bg-white/10 text-gray-300 hover:text-white"}`}
     >
-      <span className={`text-lg transition-colors ${isActive ? "text-gradient" : "text-gray-700"}`}>
-        {icon}
-      </span>
-      <span className={`font-medium transition-colors ${isActive ? "text-gradient" : "text-gray-700"}`}>
-        {label}
-      </span>
-
-      {isActive && (
-        <div className="absolute bottom-0 left-4 right-4 h-[3px] bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] rounded-full transition-all duration-300"></div>
-      )}
+      <span className="text-lg">{icon}</span>
+      <span className="text-md font-medium tracking-wide">{label}</span>
     </div>
   );
 }
-
-
-
-

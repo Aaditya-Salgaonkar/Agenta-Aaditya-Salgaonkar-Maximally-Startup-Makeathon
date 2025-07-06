@@ -1,0 +1,1 @@
+npm install clerk-sdk next-auth

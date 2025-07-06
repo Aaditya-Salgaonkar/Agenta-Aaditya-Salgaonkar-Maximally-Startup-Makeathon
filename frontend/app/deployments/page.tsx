@@ -94,9 +94,9 @@ export default function DeploymentsPage() {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#F8FAFC] to-[#E2E8F0] p-10">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-5xl font-extrabold text-indigo-600 mb-10 text-center">
+    <div className="min-h-screen bg-gradient-to-tr from-[#0B0F19] via-[#1e293b] to-[#0B0F19] text-white p-10 px-20">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-5xl font-extrabold mb-7 pb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2]">
           Deployments Center
         </h1>
 
@@ -105,7 +105,7 @@ export default function DeploymentsPage() {
             No MVPs ready for deployment.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8">
             {mvps.map((mvp) => (
               <MVPCard key={mvp.id} mvp={mvp} setMvps={setMvps} mvps={mvps} />
             ))}
@@ -242,68 +242,69 @@ const handlePushNetlify = async () => {
 };
 
 
-  return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition p-6 border border-gray-200 group relative">
-      <h2 className="text-2xl font-semibold text-indigo-600 mb-2 truncate">{mvp.name}</h2>
-      <p className="text-sm text-gray-400 mb-4">
-        Created: {new Date(mvp.created_at).toLocaleString()}
-      </p>
+return (
+  <div className="bg-[#0B0F19] text-white rounded-2xl border border-[#1F2937] shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
+    <h2 className="text-xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2]">
+      {mvp.name}
+    </h2>
+    <p className="text-sm text-[#94A3B8] mb-4">
+      Created: {new Date(mvp.created_at).toLocaleString()}
+    </p>
 
-      <div className="mb-3">
-        <h3 className="font-semibold text-gray-800 mb-1">Prompt Summary:</h3>
-        <p className="text-gray-600 text-sm line-clamp-3">{mvp.prompt}</p>
-      </div>
-
-      {mvp.github_pushed && (
-        <p className="text-green-500 font-semibold mb-2">
-          ✅ Already pushed to GitHub
-        </p>
-      )}
-
-      {mvp.netlify_deployed && mvp.netlify_url && (
-        <a
-          href={mvp.netlify_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block bg-gradient-to-tr from-green-400 to-blue-500 text-white text-center font-semibold py-2 rounded-lg shadow-lg hover:scale-105 transition duration-300 mb-3"
-        >
-          🌐 View Live on Netlify
-        </a>
-      )}
-
-      <div className="flex flex-col gap-3 mt-3">
-        {!isNetlifyConnected ? (
-          <button
-            onClick={connectNetlify}
-            className="flex items-center justify-center gap-3 px-4 py-2 bg-gradient-to-tr from-green-400 to-blue-500 text-white rounded-lg shadow hover:scale-95 transition duration-500"
-          >
-            <SiNetlify /> Connect Netlify
-          </button>
-        ) : (
-          <button
-            onClick={handlePushNetlify}
-            className="flex items-center justify-center gap-3 px-4 py-2 bg-gradient-to-tr from-green-400 to-blue-500 text-white rounded-lg shadow hover:scale-95 transition duration-500"
-          >
-            <SiNetlify /> Deploy to Netlify
-          </button>
-        )}
-
-        {!isGithubConnected ? (
-          <button
-            onClick={connectGithub}
-            className="flex items-center justify-center gap-3 px-4 py-2 bg-gradient-to-tr from-gray-800 to-black text-white rounded-lg shadow hover:scale-95 transition duration-500"
-          >
-            <FaGithub /> Connect GitHub
-          </button>
-        ) : (
-          <button
-            onClick={handlePushGithub}
-            className="flex items-center justify-center gap-3 px-4 py-2 bg-gradient-to-tr from-gray-800 to-black text-white rounded-lg shadow hover:scale-95 transition duration-500"
-          >
-            <FaGithub /> Push to GitHub
-          </button>
-        )}
-      </div>
+    <div className="mb-4">
+      <h3 className="text-md font-semibold text-[#F5F7FA] mb-1">Prompt</h3>
+      <p className="text-sm text-[#CBD5E1] line-clamp-3">{mvp.prompt}</p>
     </div>
-  );
+
+    {mvp.github_pushed && (
+      <p className="text-green-400 font-medium mb-2">✅ GitHub push complete</p>
+    )}
+
+    {mvp.netlify_deployed && mvp.netlify_url && (
+      <a
+        href={mvp.netlify_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full bg-gradient-to-r from-[#00FFB2] to-[#4DC3FF] text-center text-white font-semibold py-2 rounded-xl shadow-md hover:brightness-110 transition mb-3"
+      >
+        🌐 Live on Netlify
+      </a>
+    )}
+
+    <div className="flex flex-col gap-3 mt-4">
+      {!isNetlifyConnected ? (
+        <button
+          onClick={connectNetlify}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00FFB2] to-[#4DC3FF] text-black font-semibold rounded-xl hover:scale-95 transition duration-300"
+        >
+          <SiNetlify /> Connect Netlify
+        </button>
+      ) : (
+        <button
+          onClick={handlePushNetlify}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00FFB2] to-[#4DC3FF] text-black font-semibold rounded-xl hover:scale-95 transition duration-300"
+        >
+          <SiNetlify /> Deploy to Netlify
+        </button>
+      )}
+
+      {!isGithubConnected ? (
+        <button
+          onClick={connectGithub}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-800 to-black text-white rounded-xl font-semibold hover:scale-95 transition duration-300"
+        >
+          <FaGithub /> Connect GitHub
+        </button>
+      ) : (
+        <button
+          onClick={handlePushGithub}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-800 to-black text-white rounded-xl font-semibold hover:scale-95 transition duration-300"
+        >
+          <FaGithub /> Push to GitHub
+        </button>
+      )}
+    </div>
+  </div>
+);
+
 };

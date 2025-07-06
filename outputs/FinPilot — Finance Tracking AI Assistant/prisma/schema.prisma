@@ -1,0 +1,43 @@
+typescript
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  projects  Project[]
+  subscriptions Subscription[]
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        Int    @id @default(autoincrement())
+  amount    Float
+  category  String
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+}
+
+model Subscription {
+  id         Int    @id @default(autoincrement())
+  userId     Int
+  user       User   @relation(fields: [userId], references: [id])
+  status     String
+  startDate  DateTime
+  endDate    DateTime
+}

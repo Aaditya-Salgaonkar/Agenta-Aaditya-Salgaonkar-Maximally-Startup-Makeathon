@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Loading from "@/components/Loading";
-import {FaEnvelope} from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
 
 interface UserData {
   name: string;
@@ -19,10 +19,7 @@ export default function Account() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
       if (sessionError || !session) {
         router.push("/");
@@ -43,11 +40,7 @@ export default function Account() {
         return;
       }
 
-      setUser({
-        name: data.name,
-        email: data.email,
-      });
-
+      setUser({ name: data.name, email: data.email });
       setLoading(false);
     };
 
@@ -58,37 +51,35 @@ export default function Account() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-[#1A1A1A] p-10">
-      <div className="mb-10">
-        <h1 className="text-5xl py-3 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA]">
-          My Account
+    <div className="min-h-screen bg-gradient-to-br from-[#0B0F19] via-[#1e293b] to-[#0B0F19] text-white p-20">
+      <div className="mb-12 ">
+        <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2]">
+          Account Dashboard
         </h1>
-        <p className="text-lg text-[#6B7280] mt-4">
-          Manage your profile and account preferences
+        <p className="text-lg text-[#A0AEC0] mt-2">
+          Manage your identity, credentials & personalization settings.
         </p>
       </div>
 
-      <div className="bg-white p-8 rounded-3xl shadow-xl border border-[#E5E7EB] mb-12">
+      <div className="bg-white/5 backdrop-blur-2xl p-8  rounded-3xl border border-[#4DC3FF]/20 shadow-2xl">
         <div className="flex items-center gap-8">
-         
+          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[#7B61FF]/30 shadow-lg">
             <Image
-              src={"/avatar.png"}
-              alt="Avatar"
-              width={128}
-              height={128}
-              className="rounded-full border border-[#E5E7EB]"
+              src="/avatar.png"
+              alt="User Avatar"
+              fill
+              className="object-cover"
             />
-          
+          </div>
+
           <div>
-            <h2 className="text-3xl font-extrabold mb-2">{user.name}</h2>
-            <p className="text-lg text-[#6B7280] flex items-center gap-2">
-              <FaEnvelope /> {user.email}
+            <h2 className="text-3xl font-bold text-[#00FFB2] mb-2">{user.name}</h2>
+            <p className="text-md text-[#CBD5E1] flex items-center gap-2">
+              <FaEnvelope className="text-[#4DC3FF]" /> {user.email}
             </p>
           </div>
         </div>
       </div>
-
-     
     </div>
   );
 }

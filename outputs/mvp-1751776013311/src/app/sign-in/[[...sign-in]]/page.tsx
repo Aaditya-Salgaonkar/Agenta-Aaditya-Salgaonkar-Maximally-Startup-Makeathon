@@ -1,0 +1,1 @@
+Here's a basic sign-in page using ClerkProvider and React hooks for your SnapStats MVP. Make sure to install the Clerk SDK in your project before implementing this code.

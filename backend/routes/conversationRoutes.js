@@ -66,4 +66,49 @@ router.get('/list/:userId', async (req, res) => {
   }
 });
 
+router.patch("/update-title/:conversationId", async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    const { prompt } = req.body;
+
+    const { error } = await supabase
+      .from("conversations")
+      .update({ title: prompt }) // <-- Use 'title' not 'prompt'
+      .eq("id", conversationId);
+
+    if (error) throw error;
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/conversation/delete/:conversationId
+router.delete('/delete/:conversationId', async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+
+    // Delete messages
+    const { error: msgError } = await supabase
+      .from('messages')
+      .delete()
+      .eq('conversation_id', conversationId);
+    if (msgError) throw msgError;
+
+    // Delete conversation
+    const { error: convError } = await supabase
+      .from('conversations')
+      .delete()
+      .eq('id', conversationId);
+    if (convError) throw convError;
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;

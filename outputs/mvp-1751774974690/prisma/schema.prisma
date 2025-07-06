@@ -1,0 +1,31 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  projects  Project[]
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  url         String
+  user        User
+  userID      Int
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        Int    @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  project   Project @relation(fields: [projectID], references: [id])
+  projectID Int
+}

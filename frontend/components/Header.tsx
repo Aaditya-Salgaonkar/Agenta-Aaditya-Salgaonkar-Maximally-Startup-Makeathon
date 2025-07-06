@@ -1,34 +1,34 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from "next/link";
+import React from "react";
 
 export default function Header() {
   return (
-    <section className="w-full bg-white text-[#1A1A1A] py-32">
+    <section className="w-full bg-[#0B0F19] text-white py-32">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h1 className="text-5xl font-extrabold leading-tight mb-6 pt-5">
-          Build Unicorn-Grade SaaS with{" "}
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA]">
-            Cogneeva
+          Ship AI-Powered Tools at Lightning Speed with{" "}
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#7B61FF] via-[#4DC3FF] to-[#00FFB2]">
+            Agenta
           </span>
         </h1>
 
-        <p className="text-2xl text-gray-600 mb-12">
-          Describe your idea. Watch your startup take shape. Powered by AI. Zero Code. Limitless Possibilities.
+        <p className="text-2xl text-[#A0AEC0] mb-12">
+          From idea to deployment — build, test, and launch full-stack AI apps without writing a single line of backend code.
         </p>
 
         <div className="flex justify-center space-x-4 py-5">
           <Link href={"/signup"}>
-          <button className="px-8 py-2 bg-gradient-to-r from-[#2563EB] via-[#8B5CF6] to-[#60A5FA] rounded-xl text-white text-lg font-semibold shadow-lg hover:scale-105 transition">
-            Get Started
-          </button></Link>
-          <Link href={"#roadmap"}>
-          <button className="px-8 py-2 border-2 border-[#2563EB] text-[#2563EB] rounded-xl text-lg font-semibold shadow-md hover:scale-105 transition">
-            Learn More
-          </button>
+            <button className="px-8 py-3 bg-gradient-to-r from-[#7B61FF] to-[#4DC3FF] text-white text-lg font-semibold rounded-2xl shadow-xl hover:brightness-125 hover:scale-105 transition-all">
+              Start Building
+            </button>
           </Link>
-          
+          <Link href={"#roadmap"}>
+            <button className="px-8 py-3 border border-[#4DC3FF] text-[#4DC3FF] text-lg font-semibold rounded-2xl shadow-md hover:border-[#00FFB2] hover:text-[#00FFB2] hover:scale-105 transition-all">
+              See How It Works
+            </button>
+          </Link>
         </div>
       </div>
     </section>
-  )
+  );
 }

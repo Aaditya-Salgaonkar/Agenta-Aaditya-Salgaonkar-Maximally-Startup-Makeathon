@@ -33,7 +33,7 @@ function AuthLayout({ children }: { children: ReactNode }) {
   return session ? (
     <>
       <Sidebar />
-      <main className="min-h-screen ml-60">
+      <main className="min-h-screen ml-60 bg-black">
         {children}
       </main>
     </>
