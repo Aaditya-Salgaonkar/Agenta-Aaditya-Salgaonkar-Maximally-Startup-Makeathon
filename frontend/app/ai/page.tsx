@@ -42,7 +42,7 @@ export default function AgentaChat() {
 
   const fetchMessages = async (convId: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/${convId}`);
+      const res = await fetch(`https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/messages/${convId}`);
       const data = await res.json();
       if (data.success) {
         const formattedMessages: Message[] = data.messages.map((msg: Message) => ({
@@ -59,7 +59,7 @@ export default function AgentaChat() {
   const fetchConversations = useCallback(async () => {
     if (!userId) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/conversation/list/${userId}`);
+      const res = await fetch(`https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/conversation/list/${userId}`);
       const data = await res.json();
       if (data.success) setConversations(data.conversations);
     } catch {
@@ -74,7 +74,7 @@ export default function AgentaChat() {
   const startNewConversation = async () => {
     if (!userId) return;
     try {
-      const res = await fetch("http://localhost:5000/api/conversation/start", {
+      const res = await fetch("https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/conversation/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId }),
@@ -92,7 +92,7 @@ export default function AgentaChat() {
 
   const deleteConversation = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/conversation/delete/${id}`, {
+      const res = await fetch(`https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/conversation/delete/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Delete failed");
@@ -116,7 +116,7 @@ export default function AgentaChat() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/chat", {
+      const res = await fetch("https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -134,7 +134,7 @@ export default function AgentaChat() {
 
       // Update title on first user message
       if (messages.length === 0) {
-        await fetch(`http://localhost:5000/api/conversation/update-title/${conversationId}`, {
+        await fetch(`https://agenta-aaditya-salgaonkar-maximally.onrender.com/api/conversation/update-title/${conversationId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: userMessage.message }),
