@@ -16,11 +16,24 @@ Guidelines:
 // --- Code block extractor ---
 function extractCode(content) {
   content = content.trim();
+
   const match = content.match(/```(?:tsx|ts|js|json)?\n?([\s\S]*?)```/);
-  if (match) return match[1].trim();
+  if (match) {
+    let code = match[1].trim();
+    let lines = code.split("\n");
+
+    // Remove garbage first lines like "typescript", "json", "on", "file", etc.
+    while (/^(typescript|json|tsx|ts|js|on|file|code)$/i.test(lines[0]?.trim())) {
+      lines.shift();
+    }
+
+    return lines.join("\n").trim();
+  }
+
   if (content.length > 0) return content;
   throw new Error("No valid code content found");
 }
+
 
 // --- Call OpenRouter AI API ---
 async function generateFile(taskPrompt) {
