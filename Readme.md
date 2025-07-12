@@ -1,9 +1,9 @@
 
 ## 🚀 Agenta — The AI-Powered SaaS MVP Builder
 
-**Hackathon Submission**: [Maximally Startup Makeathon 2025](https://maximally.in)  
+**Hackathon Submission**: [United Hacks V5] 
 **Built by**: Aaditya Salgaonkar  
-**Duration**: 5-6 days | Solo Build  
+**Duration**: 1.5 days | Solo Build  
 ---
 
 ## ❓ The Problem
@@ -142,7 +142,7 @@ Agenta can revolutionize how startups are built by:
 Full Stack Builder | Goa, India 🇮🇳  
 📫 aadityasalgaonkar@gmail.com  
 
-> “Built solo during Maximally Startup Makeathon. Agenta is my vision of democratizing execution for future founders.”
+> “Built solo during United Hacks V5. Agenta is my vision of democratizing execution for future founders.”
 
 ---
 
@@ -151,7 +151,7 @@ Full Stack Builder | Goa, India 🇮🇳
 
 Thanks to:
 
-- [Maximally.in](https://maximally.in)
+- [United Hacks V5]
 - Supabase, OpenRouter, Google Gemini
 - Netlify, GitHub APIs
 - Mentors, judges & builders from the hackathon 💙
