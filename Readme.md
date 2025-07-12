@@ -1,7 +1,7 @@
 
 ## 🚀 Agenta — The AI-Powered SaaS MVP Builder
 
-**Hackathon Submission**: [United Hacks V5] 
+**Hackathon Submission**: United Hacks V5 
 **Built by**: Aaditya Salgaonkar  
 **Duration**: 1.5 days | Solo Build  
 ---
